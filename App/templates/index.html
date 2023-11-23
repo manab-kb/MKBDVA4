@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vector Embeddings Visualization</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+      #container {
+        display: flex;
+      }
+      #sidebar {
+        width: 0;
+        overflow-x: hidden;
+        transition: 0.5s;
+        padding: 10px;
+        background-color: #f1f1f1;
+        position: fixed;
+        height: 100%;
+      }
+      #sidebar a {
+        padding: 8px 8px 8px 32px;
+        text-decoration: none;
+        font-size: 18px;
+        color: #818181;
+        display: block;
+        transition: 0.3s;
+      }
+      #sidebar a:hover {
+        color: #f1f1f1;
+      }
+      #sidebar .closebtn {
+        position: absolute;
+        top: 0;
+        right: 25px;
+        font-size: 36px;
+        margin-left: 50px;
+      }
+      #main {
+        flex-grow: 1;
+        height: 80vh;
+        padding: 10px;
+      }
+      #searchContainer {
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="container">
+      <div id="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeSidebar()"
+          >&times;</a
+        >
+        <br /><br /><br /><br />
+        <button onclick="toggleSummary()">Toggle Summary</button>
+        <p id="summaryText">
+          Placeholder for summary content.
+          <br /><br />
+        </p>
+        <div id="searchContainer">
+          <input type="text" id="searchInput" placeholder="Search Text" />
+          <button onclick="searchText()">Search</button>
+        </div>
+      </div>
+      <div id="main">
+        <button class="openbtn" onclick="openSidebar()">&#9776; Explore</button>
+        <div id="plot" style="height: 100vh"></div>
+      </div>
+    </div>
+    <script>
+      var plot_json = {{ plot_json | tojson | safe }};
+      var plot = Plotly.newPlot('plot', JSON.parse(plot_json));
+
+      function toggleSummary() {
+          var summary = document.getElementById('summaryText');
+          summary.style.display = (summary.style.display === 'none' || summary.style.display === '') ? 'block' : 'none';
+      }
+
+      function searchText() {
+            var searchText = document.getElementById('searchInput').value.toLowerCase();
+            var points = plot.data[0].hovertext.map(text => text.toLowerCase());
+            var indices = [];
+
+            for (var i = 0; i < points.length; i++) {
+                if (points[i].includes(searchText)) {
+                    indices.push(i);
+                }
+            }
+
+            console.log(indices)
+
+            blinkPoints(indices);
+        }
+
+        function blinkPoints(indices) {
+            var originalSizes = plot.data[0].marker.size;
+
+            Plotly.update('plot', {
+                'selectedpoints': indices,
+                'marker.size': originalSizes.map((size, i) => indices.includes(i) ? size * 1.5 : size),
+            });
+
+            setTimeout(() => {
+                Plotly.update('plot', {
+                    'selectedpoints': indices,
+                    'marker.size': originalSizes,
+                });
+
+                setTimeout(() => {
+                    Plotly.update('plot', {
+                        'selectedpoints': indices,
+                        'marker.size': originalSizes.map((size, i) => indices.includes(i) ? size * 1.2 : size),
+                    });
+
+                    setTimeout(() => {
+                        Plotly.update('plot', {
+                            'selectedpoints': indices,
+                            'marker.size': originalSizes,
+                        });
+                    }, 500);
+                }, 500);
+            }, 2000);
+        }
+
+      function openSidebar() {
+          document.getElementById('sidebar').style.width = '250px';
+          document.getElementById('main').style.marginLeft = '250px';
+      }
+
+      function closeSidebar() {
+          document.getElementById('sidebar').style.width = '0';
+          document.getElementById('main').style.marginLeft= '0';
+      }
+    </script>
+  </body>
+</html>
