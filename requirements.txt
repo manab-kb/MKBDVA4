@@ -1,1 +1,5 @@
-Insert/generate requirements for your project title here.
+Flask==2.2.5
+numpy==1.25.0
+pandas==2.0.3
+plotly==5.17.0
+scikit_learn==1.3.0

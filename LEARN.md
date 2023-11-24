@@ -1,13 +1,12 @@
-# Insert *your project title* here
-Write a detailed description about your project - eg: instructions on how to get started, common issues, etc.
+# MKBDVA4
+Repository containing code for Assignment 4 of the course Data Visualisation - Year 4 Sem 1.
 
-# Contributing to *your project title*
-Hello and welcome! We are so glad that you are interested in contributing to *your project title*!
+# Contributing to MKBDVA4
+Hello and welcome! We are so glad that you are interested in contributing to MKBDVA4!
 We only have a couple of rules and we hope you enjoy the process :)
 
 ## Contributing Rules
 1. Don't move or delete any files. Only modify them.
-2. Add additional rules as per *your project title*.
 
 ## Contributing Process
 1. Fork the repository
