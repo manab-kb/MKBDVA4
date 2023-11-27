@@ -7,18 +7,44 @@
     <title>Vector Embeddings Visualization</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      header {
+        background-color: #333;
+        color: white;
+        padding: 15px;
+        text-align: center;
+      }
+
+      footer {
+        background-color: #333;
+        color: white;
+        padding: 10px;
+        text-align: center;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+      }
+
       #container {
         display: flex;
       }
+
       #sidebar {
         width: 0;
         overflow-x: hidden;
         transition: 0.5s;
-        padding: 10px;
+        padding: 13px;
         background-color: #f1f1f1;
         position: fixed;
         height: 100%;
       }
+
       #sidebar a {
         padding: 8px 8px 8px 32px;
         text-decoration: none;
@@ -27,9 +53,11 @@
         display: block;
         transition: 0.3s;
       }
+
       #sidebar a:hover {
         color: #f1f1f1;
       }
+
       #sidebar .closebtn {
         position: absolute;
         top: 0;
@@ -37,17 +65,24 @@
         font-size: 36px;
         margin-left: 50px;
       }
+
       #main {
         flex-grow: 1;
         height: 80vh;
         padding: 10px;
       }
+
       #searchContainer {
         margin-top: 10px;
       }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   </head>
   <body>
+    <header>
+      <h1>Data Visualisation CS7DS4 - Assignment 4</h1>
+    </header>
+
     <div id="container">
       <div id="sidebar">
         <a href="javascript:void(0)" class="closebtn" onclick="closeSidebar()"
@@ -71,17 +106,17 @@
         <div id="plot" style="height: 100vh"></div>
       </div>
     </div>
+
+    <footer>
+      <p>&copy; 2023 Data Visualisation Assignment by Manab Kumar Biswas. All rights reserved.</p>
+      <a href="https://github.com/manab-kb/MKBDVA4" target="_blank" rel="noopener noreferrer">
+        <i class="fab fa-github"></i>
+      </a>
+    </footer>
+
     <script>
       var plot_json = {{ plot_json | tojson | safe }};
-      var layout = {
-        scene: {
-          camera: {
-            eye: {x: 2.0, y: 2.0, z: 0.1}
-          },
-          annotations: []
-        }
-      }
-      var plot = Plotly.newPlot('plot', JSON.parse(plot_json), layout);
+      var plot = Plotly.newPlot('plot', JSON.parse(plot_json));
 
       function toggleSummary() {
           var summary = document.getElementById('summaryText');
@@ -91,35 +126,60 @@
       function searchText() {
             var searchText = document.getElementById('searchInput').value.toLowerCase();
             plot.then(function (resolvedPlot) {
-              points = []
-              resolvedPlot.data[0].customdata.forEach(entry => {
-                points.push(entry[0].toLowerCase())
-              })
-              var indices = [];
+              points1 = []
+              points2 = []
 
-              for (var i = 0; i < points.length; i++) {
-                  if (points[i].includes(searchText)) {
-                      indices.push(i);
+              resolvedPlot.data[0].customdata.forEach(entry => {
+                points1.push(entry[0].toLowerCase())
+              })
+
+              resolvedPlot.data[1].customdata.forEach(entry => {
+                points2.push(entry[0].toLowerCase())
+              })
+              var indices1 = [];
+              var indices2 = [];
+
+              for (var i = 0; i < points1.length; i++) {
+                  if (points1[i].includes(searchText)) {
+                      indices1.push(i);
                   }
               }
-              highlightPoints(indices)
+
+              for (var i = 0; i < points2.length; i++) {
+                  if (points2[i].includes(searchText)) {
+                      indices2.push(i);
+                  }
+              }
+              highlightPoints(indices1, indices2)
             })
       }
 
-      function highlightPoints(indices) {
+      function highlightPoints(indices1, indices2) {
         plot.then (function (resolvedPlot) {
-          console.log(resolvedPlot.data)
-          var originalColor = resolvedPlot.data[0].marker.color;
+          var originalColor1 = resolvedPlot.data[0].marker.color;
+          var originalColor2 = resolvedPlot.data[1].marker.color;
 
           Plotly.update('plot', {
-              'selectedpoints': indices,
+              'selectedpoints': indices1,
               'marker.color': 'yellow',
           });
 
           setTimeout(() => {
               Plotly.update('plot', {
-                  'selectedpoints': indices,
-                  'marker.color': originalColor,
+                  'selectedpoints': indices1,
+                  'marker.color': originalColor1,
+              });
+          }, 10000);
+
+        Plotly.update('plot', {
+              'selectedpoints': indices2,
+              'marker.color': 'yellow',
+          });
+
+          setTimeout(() => {
+              Plotly.update('plot', {
+                  'selectedpoints': indices2,
+                  'marker.color': originalColor2,
               });
           }, 10000);
         })

@@ -8,9 +8,10 @@ import pandas as pd
 
 app = Flask(__name__)
 
+
 @app.route('/')
 def index():
-    with open('Data/gptforall-embeddings.json', 'r') as file:
+    with open('../Data/gptforall-embeddings.json', 'r') as file:
         data = json.load(file)
 
     vectors = [entry['Vector'] for entry in data.values()]
@@ -50,7 +51,7 @@ def index():
         scene=dict(
             xaxis_title='Distance_X',
             yaxis_title='Distance_Y',
-            zaxis_title='Distance_Z'
+            zaxis_title='Distance_Z',
         ),
         legend=dict(
             title_text='Legend : Contains Python Code',
@@ -63,9 +64,14 @@ def index():
             font=dict(size=20),
         )
     )
+    camera = dict(
+        eye = dict(x=0.5, y=0.5, z=0)
+    )
+    fig.update_layout(scene_camera=camera)
 
     plot_json = fig.to_json()
     return render_template('index.html', plot_json=plot_json)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
