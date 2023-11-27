@@ -76,7 +76,10 @@
         margin-top: 10px;
       }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
   </head>
   <body>
     <header>
@@ -86,12 +89,18 @@
     <div id="container">
       <div id="sidebar">
         <a href="javascript:void(0)" class="closebtn" onclick="closeSidebar()"
-          >&times;</a
-        >
+          >&times;</a>
         <br /><br /><br /><br />
         <button onclick="toggleSummary()">Toggle Summary</button>
-        <p id="summaryText">
-          Placeholder for summary content.
+        <p id="summaryText" style="padding: 20px; text-align: justify;">
+          A 3D scatter plot based visualisation of dimentionally reduced vector
+          embeddings from the Pytch webapp, used to explore and identify
+          clusters of data within itself. Datapoints uses colour, size and
+          geometry as encoding channels to represent presence of code, length of
+          content and relation to neighbouring datapoints respectively. Search
+          function highlights datapoints with nearest cosine distances of the
+          searched term. Hover over the datapoints to gain further insight. Drag
+          reigons of the plot to change its view.
           <br /><br />
         </p>
         <div id="searchContainer">
@@ -108,8 +117,15 @@
     </div>
 
     <footer>
-      <p>&copy; 2023 Data Visualisation Assignment by Manab Kumar Biswas. All rights reserved.</p>
-      <a href="https://github.com/manab-kb/MKBDVA4" target="_blank" rel="noopener noreferrer">
+      <p>
+        &copy; 2023 Data Visualisation Assignment by Manab Kumar Biswas. All
+        rights reserved.
+      </p>
+      <a
+        href="https://github.com/manab-kb/MKBDVA4"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         <i class="fab fa-github"></i>
       </a>
     </footer>
