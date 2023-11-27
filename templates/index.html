@@ -47,7 +47,6 @@
       }
     </style>
   </head>
-
   <body>
     <div id="container">
       <div id="sidebar">
@@ -66,13 +65,23 @@
         </div>
       </div>
       <div id="main">
-        <button class="openbtn" onclick="openSidebar()">&#9776; Explore</button>
+        <button class="openbtn" style="margin: 20px" onclick="openSidebar()">
+          &#9776; Explore
+        </button>
         <div id="plot" style="height: 100vh"></div>
       </div>
     </div>
     <script>
       var plot_json = {{ plot_json | tojson | safe }};
-      var plot = Plotly.newPlot('plot', JSON.parse(plot_json));
+      var layout = {
+        scene: {
+          camera: {
+            eye: {x: 2.0, y: 2.0, z: 0.1}
+          },
+          annotations: []
+        }
+      }
+      var plot = Plotly.newPlot('plot', JSON.parse(plot_json), layout);
 
       function toggleSummary() {
           var summary = document.getElementById('summaryText');
@@ -81,49 +90,40 @@
 
       function searchText() {
             var searchText = document.getElementById('searchInput').value.toLowerCase();
-            var points = plot.data[0].hovertext.map(text => text.toLowerCase());
-            var indices = [];
+            plot.then(function (resolvedPlot) {
+              points = []
+              resolvedPlot.data[0].customdata.forEach(entry => {
+                points.push(entry[0].toLowerCase())
+              })
+              var indices = [];
 
-            for (var i = 0; i < points.length; i++) {
-                if (points[i].includes(searchText)) {
-                    indices.push(i);
-                }
-            }
+              for (var i = 0; i < points.length; i++) {
+                  if (points[i].includes(searchText)) {
+                      indices.push(i);
+                  }
+              }
+              highlightPoints(indices)
+            })
+      }
 
-            console.log(indices)
+      function highlightPoints(indices) {
+        plot.then (function (resolvedPlot) {
+          console.log(resolvedPlot.data)
+          var originalColor = resolvedPlot.data[0].marker.color;
 
-            blinkPoints(indices);
-        }
+          Plotly.update('plot', {
+              'selectedpoints': indices,
+              'marker.color': 'yellow',
+          });
 
-        function blinkPoints(indices) {
-            var originalSizes = plot.data[0].marker.size;
-
-            Plotly.update('plot', {
-                'selectedpoints': indices,
-                'marker.size': originalSizes.map((size, i) => indices.includes(i) ? size * 1.5 : size),
-            });
-
-            setTimeout(() => {
-                Plotly.update('plot', {
-                    'selectedpoints': indices,
-                    'marker.size': originalSizes,
-                });
-
-                setTimeout(() => {
-                    Plotly.update('plot', {
-                        'selectedpoints': indices,
-                        'marker.size': originalSizes.map((size, i) => indices.includes(i) ? size * 1.2 : size),
-                    });
-
-                    setTimeout(() => {
-                        Plotly.update('plot', {
-                            'selectedpoints': indices,
-                            'marker.size': originalSizes,
-                        });
-                    }, 500);
-                }, 500);
-            }, 2000);
-        }
+          setTimeout(() => {
+              Plotly.update('plot', {
+                  'selectedpoints': indices,
+                  'marker.color': originalColor,
+              });
+          }, 10000);
+        })
+      }
 
       function openSidebar() {
           document.getElementById('sidebar').style.width = '250px';
