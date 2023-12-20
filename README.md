@@ -4,8 +4,9 @@ Repository containing code for Assignment 4 of the course Data Visualisation - Y
 # How to Run
 1. Clone the repo onto your local machine.
 2. Navigate to the root directory of the project.
-3. Run the app.py file by using the command `python3 app.py` / `py app.py`. 
-4. Open the specified localhost link as provided on the terminal to view the visualisation.
+3. Run the command `pip install -r requirements.txt` to install all the dependencies for the visualisation.
+4. Run the app.py file by using the command `python3 app.py` / `py app.py` depending on the operating system you are using.
+5. Open the specified localhost link as provided on the terminal, on a web browser of your choice to view the visualisation.
 
 # Contributing to MKBDVA4
 Hello and welcome! We are so glad that you are interested in contributing to MKBDVA4!
