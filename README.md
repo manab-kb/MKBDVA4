@@ -1,6 +1,12 @@
 # MKBDVA4
 Repository containing code for Assignment 4 of the course Data Visualisation - Year 4 Sem 1.
 
+# How to Run
+1. Clone the repo onto your local machine.
+2. Navigate to the root directory of the project.
+3. Run the app.py file by using the command `python3 app.py` / `py app.py`. 
+4. Open the specified localhost link as provided on the terminal to view the visualisation.
+
 # Contributing to MKBDVA4
 Hello and welcome! We are so glad that you are interested in contributing to MKBDVA4!
 We only have a couple of rules and we hope you enjoy the process :)

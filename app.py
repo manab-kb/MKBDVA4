@@ -11,7 +11,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    with open('../Data/gptforall-embeddings.json', 'r') as file:
+    with open('./Data/gptforall-embeddings.json', 'r') as file:
         data = json.load(file)
 
     vectors = [entry['Vector'] for entry in data.values()]
